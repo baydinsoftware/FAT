@@ -1,0 +1,567 @@
+{% load staticfiles %}
+
+<html>
+	<head>
+	<script src="{% static 'fat/lib/jquery.min.js' %}"></script>
+	<script src="{% static 'fat/lib/jquery-ui.min.js' %}"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  	<link rel ="stylesheet" href="{% static 'fat/css/style.css' %}">
+  	<link rel ="stylesheet" href="{% static 'fat/css/dropzone.min.css' %}">
+	<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js" type="text/javascript"></script>	
+	<script src="{% static 'fat/lib/underscore.min.js' %}"></script>
+	<script src="{% static 'fat/lib/backbone.min.js' %}"></script>
+	<script src="{% static 'fat/lib/backbone.marionette.min.js' %}"></script>
+	<script src="{% static 'fat/lib/dropzone.js' %}"></script>
+
+	<script src="{% static 'fat/js/candidate.js' %}"></script>
+	<script src="{% static 'fat/js/candidate-stage-view.js' %}"></script>
+	<script src="{% static 'fat/js/candidate-detail-view.js' %}"></script>
+	<script src="{% static 'fat/js/dropdown-view.js' %}"></script>
+
+	<script src="{% static 'fat/js/user.js' %}"></script>
+	<script src="{% static 'fat/js/position.js' %}"></script>
+	<script src="{% static 'fat/js/currentUser.js' %}"></script>
+	<script src="{% static 'fat/js/department.js' %}"></script>
+	<script src="{% static 'fat/js/file.js' %}"></script>
+	<script src="{% static 'fat/js/action.js' %}"></script>
+	<script src="{% static 'fat/js/whitelistitem.js' %}"></script>
+
+	<script src="{% static 'fat/js/candidates-layout-view.js' %}"></script>
+	<script src="{% static 'fat/js/main-app-layout-view.js' %}"></script>
+	<script src="{% static 'fat/js/add-candidate-view.js' %}"></script>
+	<script src="{% static 'fat/js/stages-layout-view.js' %}"></script>
+	<script src="{% static 'fat/js/positions-layout-view.js' %}"></script>
+	<script src="{% static 'fat/js/question-view.js' %}"></script>
+	<script src="{% static 'fat/js/add-feedbackform-layout-view.js' %}"></script>
+	<script src="{% static 'fat/js/feedbackform-detail-view.js' %}"></script>
+	<script src="{% static 'fat/js/feedbackform-layout-view.js' %}"></script>
+	<script src="{% static 'fat/js/timeline-view.js' %}"></script>
+	<script src="{% static 'fat/js/users-layout-view.js' %}"></script>
+	<script src="{% static 'fat/js/whitelist-layout-view.js' %}"></script>
+
+
+	<script src="{% static 'fat/js/position-detail-view.js' %}"></script>
+	<script>
+		var currentUser = new CurrentUser({'username': "{{user.username}}", 'id': "{{user.id}}", 
+			'is_staff': "{{user.is_staff}}", 'profile_picture': "{{user.userprofile.picture_url}}",
+			'display_name': "{{user.userprofile.display_name}}" });
+	</script>
+
+
+	<title>Fat Dashboard</title>
+	<div id='banner'>
+		<img id="profilePicture" src="{{user.userprofile.picture_url}}">
+		<p id ="bannerText"><a href="/fat/main#userdetail/{{ user.id }}">{{ user.userprofile.display_name }}</a> -- <a href="/fat/logout_view">Log out</a></p>
+	</div>
+	</head>
+	<body>
+		<div id="MainRegion"></div>
+
+		<script type="text/template" id="template-MainAppLayoutView">
+			<h2 class="fatTitle">Welcome to Fulcrum Applicant Tracker</h2>
+			<h5>The Best Applicant Tracker in the World!</h5>
+
+			<div class="fatNavigation">
+				<div>
+					<a href="#candidates">Candidates</a>
+				</div>
+				<div>
+					<a href="#addcandidate">Add Candidate</a>
+				</div>
+				<div>
+					<a href="#joblistings">Job Listings</a>
+				</div>
+				<div>
+					<a href= "#users">Users</a>
+				</div>
+				<div class = "admin">
+					<div>
+						<a href="#feedbackform">Forms</a>
+					</div>
+					<div>
+						<a href="#stages">Stage Management</a>
+					</div>
+				</div>
+			</div>
+
+			<div id="ContentRegion"></div>
+		</script>
+
+		<script type="text/template" id="template-CandidatesLayoutView">
+
+			<div class = "row">
+				<div id = "StageNavigationRegion" class = 'col-xs-2'>
+				</div>
+				<div class = 'col-xs-9'>
+					<div id="CandidateNavigationRegion" class = "candidateNavigation">
+						<div class="btn-group" role="group" aria-label="..." >
+						  <button type="button" class="btn btn-default" id="activeCandidates">Active</button>
+						  <button type="button" class="btn btn-default" id="myCandidates">Mine</button>
+						  <button type="button" class="btn btn-default" id="archivedCandidates">Archived</button>
+						</div>
+					</div>
+
+					<div id = "DisplayCandidatesRegion">
+					</div>
+				</div>
+			</div>
+		</script>
+
+		<script type="text/template" id="template-CandidatesView">
+		</script>
+
+		<script type="text/template" id="template-StageView">
+			<a href= "main#stage<%= id %>"><li class = 'list-group-item' >
+				<h4><%- name %></h4>
+			</li></a>
+		</script>
+
+		<script type="text/template" id="template-CandidateItemView">
+				<td><%- name %></td>
+				<td><%- moment(new Date(date_added)).format('MMMM Do YYYY') %> </td>
+				<td><%- email %></td>
+				<td><%- owner_name %></td>
+				<td><%- position_name %></td>
+				<td><%- waiting %></td>
+		</script>
+
+		<script type="text/template" id="template-CandidatePositionView">
+				<td><%- name %></td>
+				<td><%- moment(new Date(date_added)).format('MMMM Do YYYY') %> </td>
+				<td><%- email %></td>
+				<td><%- owner_name %></td>
+				<td><%- stage_name %></td>
+				<td><%- waiting %></td>
+		</script>
+
+		<script type="text/template" id="template-CandidateDetailView">
+            <div> 
+                <h2><strong><%- name %></strong>:</h2>
+                <div class = "row" id = 'candidateDisplayRegion'>
+                    <div class = "col-md-6">
+                    	<div id = "RatingTableRegion"></div>
+                    	<br>
+                        Add Feedback: <div id = "FormSelectRegion"></div>
+                        <div class = "FormDisplayRegion"></div>
+                        </br></br><br><br>
+                        <div id = "TimelineRegion">
+
+                        </div>
+                        <button class="btn btn-default" id="unsecretAll" style = "display:none">
+                        	Mark All Feedback Not Private
+                        </button>
+                        <div id = "ActionRegion">
+                        </div>
+                    </div>
+                    <div class = "col-md-6">
+                        <p><%- moment(new Date(date_added)).format('MMMM Do YYYY, h:mm a') %></p>
+                        <p contenteditable = "true" id= "email"><%- email %></p>
+                        Stage: <div class="StageSelectRegion" value = "stage"></div> 
+                        Job Listing: <div class="PositionSelectRegion" value = "position" ></div> 
+                        Owner: <div class="UserSelectRegion" value = "owner"></div> </br></br>
+                        Waiting: <p id = "waiting"><%- waiting %></p>
+                        Archived: <p id = "archived"><%- archived %></p>
+                    
+                        <h4>Files: </h4>
+                        <div id="filesDisplayRegion"></div>
+                        <div id="filesUploadProgressRegion"></div>
+                        <h4>Add new File </h4>
+                        <form id="dropFileRegion">{% csrf_token %}drag resume here to upload!</form>
+                        <button class="btn btn-md" id="trashCandidateButton">Trash Candidate</button>
+                        <div id='confirmTrashCandidate'>
+                        	</br>
+                        	<strong>Are you sure you want to delete <%- name %>? This cannot be undone.</strong>
+                     		</br>
+	                        <button class="btn btn-sm" id="yesTrashCandidate">Yes</button>
+	                        <button class="btn btn-sm" id="noTrashCandidate">Cancel</button>
+	                    </div>
+                    </div>
+            	</div>
+            </div>
+        </script>
+
+        <script type = "text/template" id = "template-RatingTableItemView">
+        	<span><img src = '<%-picture_url%>'>   <%-rating%></span>
+        </script>
+        <script type = "text/template" id = "template-RatingTableRowView">
+        	<th><%-name%></th><td id = "ratingTableRow"></td><td>Avg: <%-average%><td>
+        </script>
+
+		<script type="text/template" id="template-FileItemView">
+				Filename: <%- name %>
+				<button class="btn btn-xs" id="downloadButton">Download</button>
+				<button class="btn btn-xs" id="removeButton">Delete</button>
+		</script>
+
+		<script type= "text/template" id="template-CandidateStageView">
+ 			<caption id="stage<%= id %>">
+				<h2><%- name %>s</h2>
+			</caption>
+			<thead>
+				<tr>
+					<td>Name</td>
+					<td>Added</td>
+					<td>Email</td>
+					<td>Owner</td>
+					<td>Job Listing</td>
+					<td>Waiting</td>
+				</tr>
+			</thead>
+		</script>
+
+		<script type="text/template" id="template-AddCandidateView">
+			<h2 id = "test">Add Candidate</h2>
+			<div id="AddCandidateRegion">
+				<div id="addCandidateMessage"></div>
+				<input type="text" id="candidate_name" placeholder="Name"/> </br></br>
+				<input type="text" id="candidate_email" placeholder="Email"/> </br></br>
+				Stage: <div class="StageSelectRegion"></div> 
+				<div id="createStageRegion" style="display:none">
+					</br>
+					<input type = "text" id = "AddStageText" placeholder = "Stage Name">
+					<button class = "btn btn-default" id = "add_stage_button">Create Stage</button>
+				</div> </br>
+				Job Listing: <div class="PositionSelectRegion" ></div> 
+				<div id="createPositionRegion" style="display:none">
+					</br>
+					<input type = "text" id = "AddPositionText" placeholder = "Position Name">
+					<button class = "btn btn-default" id = "add_position_button">Create Listing</button>
+				</div> </br>
+				Owner: <div class="UserSelectRegion"></div> </br></br>
+				<button class="btn btn-default" id="add_candidate_button">Add Candidate</button>
+				<button class="btn btn-default" id="CancelAddCandidate">Cancel</button>
+			</div>
+		</script>
+		<script type="text/template" id="template-AddFeedbackFormView">
+			<h2 class = "heading">Create Feedback Form</h2>
+			<div id="CreateFeedbackFormRegion">
+				<div id="addFeedbackFormMessage"></div>
+				<input type="text" id="form_name" class = "form-control" placeholder="Form Name"/> </br></br>
+				<div class="RatingTypeSelectRegion">
+					Rating: 
+					<select class = "form-control">
+						<option value = "No Rating">No Rating</option>
+						<option value = "Rating Optional">Rating Optional</option> 
+						<option value = "Rating Required">Rating Required</option>
+					</select>
+				</div> <br>
+				<div>
+					Questions: 
+					<div id = "QuestionsRegion">
+					</div>	</br>
+					<button class ="btn btn-default" id = "AddQuestion">
+						Add Question
+					</button>
+				</div><br>
+				Mark Private by Default: <span id="SecretByDefault">false</span>
+				<br> <br>
+				<button class="btn btn-default" id = "AddFeedbackForm">Save Form</button>
+				<button class="btn btn-default" id = "CancelAddFeedbackForm">Cancel</button>
+			</div>
+		</script>
+
+		<script type="text/template" id="template-FeedbackFormDetailView">
+			<div id = "rating" style="display:none">
+				Rating: <span class = "required" style = "display:none">*</span>
+				<select class = "form-control">
+					<option value = 1>1</option>
+					<option value = 2>2</option> 
+					<option value = 3>3</option>
+					<option value = 4>4</option>
+				</select>
+			</div>
+			<div id = "NotesRegion">
+				<span>Notes/Comments</span>
+				<textarea class="form-control edit_notes" rows="5" placeholder = "Notes/Comments"></textarea>
+			<div>
+			<div id = "DisplayQuestionsRegion">
+			</div>
+			Secret: <span id = "Secret"><%- secret_by_default%></span> <br>
+			<button class="btn btn-default" id = "AddFeedback">Save Feedback</button>
+			<button class="btn btn-default" id = "CancelFeedback">Cancel</button>
+		</script>
+
+		<script type = "text/template" id = "template-FeedbackItemDisplayView">
+			<img src='<%-picture_url%>'> Author: <%-author_name%>
+			<div id = "rating" style="display:none">
+				Rating: <span class = "required" style = "display:none">*</span>
+				<span id = "displayRating"><%-rating%></span>
+				<select class = "form-control" id = "editableRating" style = "display:none">
+					<option value = 1>1</option>
+					<option value = 2>2</option> 
+					<option value = 3>3</option>
+					<option value = 4>4</option>
+				</select>
+			</div>
+			<div id = "NotesRegion">
+				<div id = "displayNotes">
+					<span class = "waitingGrayedOut">Notes/Comments: </span>
+					<br><%- notes %>
+				</div>
+				<div id = "editableNotes" style = "display:none">
+					Notes/Comments:
+					<textarea class="form-control edit_notes" rows="5" placeholder = "Notes/Comments"><%-notes%></textarea>
+				</div>
+			<div>
+			<br>
+			<div id = "DisplayAnswerItemsRegion"></div>
+			Secret: <span id = "Secret"><%- secret%></span> <br>
+			<button class="btn btn-default" id = "EditFeedback" style = "display:none">Edit</button>
+			<button class="btn btn-default" id = "DeleteFeedback" style = "display:none">Delete</button>
+			<button class="btn btn-default" id = "DoneEditingFeedback" style = "display:none">Finish Editing</button>
+			<br><br>
+		</script>
+		
+		<script type="text/template" id="template-CreateQuestionView">
+			<input type="text" class = 'form-control question_text' placeholder="Ex. How does this candidate align with our values?" value = "<%-question_text%>" >
+			Mark As Required <input type = "checkbox" class = "required" > 
+			<button class ="btn btn-sm btn-link delete">Delete</button>
+		</script>
+
+		<script type="text/template" id="template-DisplayAnswerItemView">
+			<span class = waitingGrayedOut><%-question_text%></span>	
+			<br>
+			<p class = "answer_text"><%- text %></p>
+		</script>
+
+		<script type="text/template" id="template-EditAnswerItemView">
+			<span class = waitingGrayedOut><%-question_text%></span>	
+			<span class = "required" style = "display:none">*</span>
+			<br>
+			<textarea class="form-control edit_answer" rows="5" placeholder = "My Answer"><%-text%></textarea>
+		</script>
+
+		<script type="text/template" id="template-DisplayAnswerBoxView">
+			<%-question_text%>		
+			<span class = "required" style = "display:none">*</span>
+			<br>
+			<textarea class="form-control answer_text" rows="5" placeholder = "My Answer" ></textarea>
+		</script>
+
+		<script type="text/template" id="template-DropDownItemView">
+			<%- name%>
+		</script>
+
+		<script type="text/template" id="template-DropDownUserView">
+			<%- userprofile.display_name%>
+		</script>
+
+		<script type="text/template" id="template-DropDownMenuView">
+   		   <select class = 'form-control'></select>
+
+		</script>
+
+		<script type="text/template" id="template-StagesLayoutView">
+			<div id="stageLayoutRegion">
+				<h2>Stage Management</h2>
+				<div id="StageListRegion"></div>
+				<div id="addStageRegion">
+					<div id="addStageMessage"></div>
+					Stage Name: <input type="text" id="stage_name" placeholder="Name"/> </br></br>
+					<button class="btn btn-default" id="add_stage_button">Add Stage</button>
+				</div>
+			</div>
+		</script>
+		<script type="text/template" id="template-StageItemView">
+			<td><%-name %></td>
+			<td ><%- candidates.length %> candidates</td>
+			<td ><button id="stageRemoveButton" class='btn btn-link'>Delete</button></td>
+		</script>
+
+		<script type="text/template" id="template-PositionItemView">
+			<td class = positionItemView data-id = <%-id%>><strong><%- name %></strong></td>
+			<td class = positionItemView data-id = <%-id%>><%- candidates.length %> applicants</td>
+			<td id = "toggleActive"></td>
+			<td class = "editListing" data-id = <%-id%>>Edit Listing</td>
+		</script>
+
+		<script type="text/template" id="template-DepartmentCompositeView">
+			<caption id="department<%= id %>">
+				<h3><%- name %></h3>
+			</caption>
+			<thead>
+				<tr>
+					<td>Name</td>
+					<td>Applicants</td>
+					<td>Active</td>
+				</tr>
+			</thead>
+		</script>
+
+		<script type="text/template" id="template-PositionsLayoutView">
+			<h2>Job Listings</h2>
+			<button type="button" class="btn btn-default" id="AddListing">Add Listing</button>
+			<div id="PositionRegion" class = "row">
+				<div id="departmentListWrapper" class="col-xs-2"></div></br>
+				<div id="positionsLayoutRegion" class="col-xs-9">
+					<div class="btn-group" role="group" aria-label="..." >
+					  <button type="button" class="btn btn-default" id="allPositions">All</button>
+					  <button type="button" class="btn btn-default" id="activePositions">Active</button>
+					  <button type="button" class="btn btn-default" id="inactivePositions">Inactive</button>
+					</div>
+					<div id="allPositionsWrapper"></div>
+				</div></br>
+			</div>
+		</script>
+
+		<script type = "text/template" id = "template-AddListingView">
+			<div id="addPositionMessage"></div>
+			Job Title: <input type="text" id="position_name" placeholder="Name" value = "<%-name%>"></br></br>
+			Department: <div class="DepartmentSelectRegion" ></div>
+			<div id="createDepartmentRegion" style="display:none">
+				</br>
+				<input type = "text" id = "AddDepartmentTextf" placeholder = "Department Name">
+				<button class = "btn btn-default" id = "add_department_button">Create Department</button>
+			</div> </br>
+			Description: <textarea class="form-control positionDescription" rows="5" placeholder = ""><%-description%></textarea>
+			</br></br>
+			<button class="btn btn-default" id="AddListingButton">Save Listing</button>
+			<button class="btn btn-default" id="CancelAddListing">Cancel</button>
+		</script>
+
+		<script type="text/template" id="template-PositionDetailView">
+			<div> 
+				<h2>Job Listings</h2>
+				<h4>Applicants for <strong><%- name %></strong>:</h4>
+				<div class = "row">
+					<div id = "PositionNavRegion" class = 'col-xs-2'>
+					</div>
+					<div class = 'col-xs-9' id="DisplayCandidatesRegion" >
+					</div>
+				</div>
+			</div>
+		</script>
+
+		<script type="text/template" id="template-DepartmentView">
+			<a href= "main#department<%= id %>"><li class = 'list-group-item' >
+				<h4><%- name %></h4>
+			</li></a>
+		</script>
+
+		<script type="text/template" id="template-PositionSidebarItemView">
+			<li class = 'list-group-item'>
+				<h4><%- name %></h4>
+			</li>
+		</script>
+
+		<script type="text/template" id="template-CandidatesPositionView">
+			<thead>
+				<tr>
+					<td>Name</td>
+					<td>Date</td>
+					<td>Email</td>
+					<td>Owner</td>
+					<td>Stage</td>
+					<td>Waiting</td>
+				</tr>
+			</thead>
+		</script>
+		<script type="text/template" id='template-UserLayoutView'>
+			<h2>User Management</h2>
+			<div id='UserDisplayRegion'></div>
+			<div id='userLayoutAdminOnly'>
+				<h4>Admin-Only Actions</h4>
+				<button class='btn btn-default' id='userLayoutWhiteListButton'>Modify the login whitelist</button>
+			</div>
+		</script>
+		<script type="text/template" id="template-UserItemView">
+				<td><img src='<%-userprofile.picture_url%>'></td>
+				<td><%- first_name %> <%- last_name%></td>
+				<td><%- email %></td>
+				<td>Owns <%- candidates.length %> candidates</td>
+				<td></td>
+		</script>
+		<script type="text/template" id="template-AdminItemView">
+				<td><img src='<%-userprofile.picture_url%>'></td>
+				<td><%- first_name %> <%- last_name%></td>
+				<td><%- email %></td>
+				<td>Owns <%- candidates.length %> candidates</td>
+				<td> admin </td>
+		</script>
+		<script type="text/template" id="template-UserDetailView">
+			<h2><%- userprofile.display_name %></h2>
+			<div class='col-xs-7' id='userInfoDisplay'>
+				<div>
+					First Name:<input type= "text" class = "form-control"id = "first_name" value = <%- first_name %>>
+					Last Name: <input type= "text" class = "form-control"id = "last_name" value = <%- last_name %>>
+				</div>
+				<div>
+					Email:<input type= "text" class = "form-control"id = "email" value = <%- email %>>
+				</div>
+				<div>
+					Administrator: <span id = "admin"><%- is_staff %><img id="adminDisplayLock" src="{% static 'fat/images/lock-emoji.png' %}"
+																		title="you can't change your own admin status, bucko. Or you're not an admin in the first place."></span>
+				</div>
+				<button class="btn btn-default" id="saveUserButton">Save</button>
+				<button class="btn btn-default" id="cancelUserChanges">Cancel</button>
+			</div>
+			<div class='col-xs-5' id="userProfilePicture"></div>
+		</script>
+		<script type="text/template" id="template-UserNonEditView">
+			<div>
+				<p>First Name: <%- first_name %></p>
+				<p>Last Name: <%- last_name %></p>
+				<p>Email: <%- email %></p>
+				<p>Administrator: <%- is_staff %></p>
+			</div>
+		</script>
+		<script type="text/template" id="template-ActionItemView">
+			<img src=<%-user_picture%> style="display: inline-block">
+			<div style="display: inline-block"><%- description%></div>
+			<div style="display: inline-block"><%- moment(new Date(date_updated)).format('MMMM Do YYYY')%></div> 
+		</script>
+
+		<script type="text/template" id="template-FeedbackFormLayoutView">
+			<div id="FeedbackFormImproperView">
+				<button class="btn btn-default" id="createFeedbackForm">Add Form</button>
+				<div id = "FeedbackFormContentRegion">
+					<div id = "FeedbackFormNavRegion">
+					</div>
+					<div id = "FeedbackFormEditRegion">
+					</div>
+				</div> 
+				<button class="btn btn-default" id="CancelNewForm" style = "display: none">Cancel</button>
+			</div>
+		</script>
+		<script type = "text/template" id = "template-FeedbackFormListView">
+			<%-name%>
+		</script>
+		<script type = "text/template" id = "template-FeedbackFormEditView">
+			<%-rating_type%>
+		</script>
+		<script type = "text/template" id = "template-WhiteListLayoutView">
+			<div id='whiteListDisplayRegion'>
+				<h2>Log In Whitelist</h2>
+				<h5>which users and domains should be able to log in to FAT?</h5>
+				<div id="whiteListItemsRegion"></div>
+				<input type= "text" class = "form-control"id = "newWhiteListItem" placeholder="ex: company.com or name@company.com"></br>
+				<button class = "btn btn-default" id="WLsave">Add Item</button> <button class = "btn btn-default" id="WLcancel">Cancel</button>
+		</script>
+		<script type = "text/template" id = "template-WhiteListItem">
+			<h5 style="display: inline-block"><%- item %></h3>
+			<button class='btn btn-sm' id="WLdelete" style="display: inline-block">delete</button>
+			</br>
+		</script>
+		<script  type = "text/template" id = "template-ImproperPermissionsView">
+			<h2>Improper Permissions</h2>
+			<h4><strong>You do not have the proper permissions to view this page</strong></h4>
+			<button class = "btn btn-default" id='improperPermissionsReturnHome'>Return Home</button>
+		</script>
+
+
+		<script>
+			var FatApp = FatApp || new Backbone.Marionette.Application();
+			FatApp.addRegions({
+				MainRegion: "#MainRegion",
+			});
+			FatApp.module('FatAppMainModule', function(module, App, Backbone, Marionette, $, _){
+				module.addInitializer(function(){
+					var mainAppLayoutView = new module.MainAppLayoutView({"foo": "bar"});
+					App.MainRegion.show(mainAppLayoutView);
+				});
+			});
+			FatApp.start();
+		</script>
+	</body>
+</html>

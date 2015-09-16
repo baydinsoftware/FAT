@@ -1,0 +1,25 @@
+{% load staticfiles %}
+<head>
+
+    <!-- Google -->
+    <meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" content="995600902413-ug01h2ddrevp3vdtn9covibak7obdode.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
+    <!-- End Google -->
+
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <title>Get Fat!</title>
+</head>
+<body>
+  <div id="login_page">
+  <h1> FAT's phat login </h1>
+    <p id="error"></p>
+    {% csrf_token %}
+        <div class="g-signin2" data-onsuccess="signIn" data-theme="dark">
+    </div>
+  </div>
+    <script src="{% static 'fat/js/login.js' %}"></script>
+</body>

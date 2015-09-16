@@ -1,0 +1,23 @@
+[
+{
+    "fields": {
+        "name": "dev"
+    },
+    "model": "fat.department",
+    "pk": 2
+},
+{
+    "fields": {
+        "name": "marketing"
+    },
+    "model": "fat.department",
+    "pk": 3
+},
+{
+    "fields": {
+        "name": "misc"
+    },
+    "model": "fat.department",
+    "pk": 4
+}
+]

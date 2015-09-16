@@ -1,0 +1,44 @@
+[
+{
+    "fields": {
+        "name": "lead"
+    },
+    "model": "fat.stage",
+    "pk": 5
+},
+{
+    "fields": {
+        "name": "applicant"
+    },
+    "model": "fat.stage",
+    "pk": 6
+},
+{
+    "fields": {
+        "name": "homework"
+    },
+    "model": "fat.stage",
+    "pk": 7
+},
+{
+    "fields": {
+        "name": "phone screen"
+    },
+    "model": "fat.stage",
+    "pk": 8
+},
+{
+    "fields": {
+        "name": "on-site"
+    },
+    "model": "fat.stage",
+    "pk": 9
+},
+{
+    "fields": {
+        "name": "hired"
+    },
+    "model": "fat.stage",
+    "pk": 10
+}
+]

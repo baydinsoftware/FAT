@@ -1,0 +1,11 @@
+[
+{
+    "fields": {
+        "rating_type": "No Rating",
+        "secret_by_default": false,
+        "name": "notes"
+    },
+    "model": "fat.feedbackform",
+    "pk": 1
+}
+]

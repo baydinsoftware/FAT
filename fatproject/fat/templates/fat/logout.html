@@ -1,0 +1,31 @@
+{% load staticfiles %}
+<head>
+
+	<!-- Google -->
+	<meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" content="995600902413-ug01h2ddrevp3vdtn9covibak7obdode.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+	<!-- End Google -->
+
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
+    <style type="text/css">
+        #logout_button{
+            display: none;
+        }
+    </style>
+
+
+    <title>Fat logout</title>
+</head>
+<body onload="signOut">
+	<p>Please wait...
+
+    </p>
+    <p>If you're not redirected, click <a href="/fat/">here</a></p>
+	<div id="logout_button" class="g-signin2" data-onsuccess="signOut" data-theme="dark"></div>
+
+    <script src="{% static 'fat/js/logout.js' %}"></script>
+</body>

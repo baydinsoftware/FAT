@@ -1,0 +1,47 @@
+body{
+	margin: 20px;
+	padding: 0;
+}
+
+a {
+	text-decoration: none
+}
+
+.waitingCandidate {
+    background-color: green;
+}
+
+.waitingGrayedOut {
+	opacity: 0.5;
+}
+
+.form-control{
+	width: 400px;
+}
+
+thead{
+	font-weight: bold;
+}
+
+.requiredField{
+	border-color: #FF0000;
+}
+
+#dropFileRegion{
+	border: 1px solid;
+	border-color: gray;
+	width: 300px;
+	height: 100px;
+	border-radius: 10px;
+}
+
+#profilePicture{
+	display: inline-block;
+}
+#bannerText{
+	display: inline-block;
+}
+
+#ratingTableRow{
+	display: inline-block;
+}
