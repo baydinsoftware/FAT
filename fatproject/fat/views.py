@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth.models import User
-from fat.models import Position, Stage, Candidate, Feedback, Source, UserProfile, WhiteListItem
+from models import Position, Stage, Candidate, Feedback, Source, UserProfile, WhiteListItem
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 import datetime

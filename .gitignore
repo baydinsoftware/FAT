@@ -49,10 +49,14 @@ coverage.xml
 
 # Django stuff:
 *.log
-db.sqlite3
 
 # Sphinx documentation
 docs/_build/
 
 # PyBuilder
 target/
+
+# Project Specific Files
+fatproject/db.sqlite3
+fatproject/fatproject/secrets.py
+

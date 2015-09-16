@@ -1,18 +1,16 @@
 from boto.s3.connection import S3Connection
 from boto.s3.key import Key
 
-AWS_ACCESS_KEY = 'REPLACE_WITH_YOUR_AWS_ACCESS_KEY'
-AWS_SECRET_KEY = 'REPLACE_WITH_YOUR_AWS_SECRET_KEY'
-AWS_BUCKET = 'COMPANYNAME.fatfiles'
+from fatproject.settings import AWS_ACCESS_KEY, AWS_SECRET_KEY, AWS_S3_BUCKET
 
 def check_if_key_exists(filename):
 	conn = S3Connection(AWS_ACCESS_KEY, AWS_SECRET_KEY)
-	bucket = conn.get_bucket(AWS_BUCKET)
+	bucket = conn.get_bucket(AWS_S3_BUCKET)
 	return bucket.get_key(filename)
 
 def get_key_from_bucket(filename):
 	conn = S3Connection(AWS_ACCESS_KEY, AWS_SECRET_KEY)
-	k = Key(conn.get_bucket(AWS_BUCKET))
+	k = Key(conn.get_bucket(AWS_S3_BUCKET))
 	k.key = filename
 	return k
 
@@ -46,12 +44,12 @@ def delete_key(filename):
 
 def empty_bucket():
 	conn = S3Connection(AWS_ACCESS_KEY, AWS_SECRET_KEY)
-	bucket = conn.get_bucket(AWS_BUCKET)
+	bucket = conn.get_bucket(AWS_S3_BUCKET)
 	for key in bucket.list():
 		key.delete()
 
 def list_keys():
 	conn = S3Connection(AWS_ACCESS_KEY, AWS_SECRET_KEY)
-	bucket = conn.get_bucket(AWS_BUCKET)
+	bucket = conn.get_bucket(AWS_S3_BUCKET)
 	for key in bucket.list():
 		print key
