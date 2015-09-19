@@ -11,7 +11,7 @@ This project was started to create an applicant tracking system using modern tec
 First, install the dependencies. You may wish to do this inside of a virtualenv that you create at the root of the repository. 
 
 ```
-pip install django djangorestframe boto
+pip install django djangorestframework boto
 ```
 
 Then you'll need to create a `secrets.py` and place it in the same directory as `settings.py`. It should contain the following (which should not be checked into git):
